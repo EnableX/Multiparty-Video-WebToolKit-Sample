@@ -32,7 +32,7 @@ var config = {
     video: true,
     audio: true,
     data: true,
-    videoSize: VideoSize[video_type],
+    videoSize: [],
     // attributes: { name: user_name, type: user_type },
 };
 

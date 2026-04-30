@@ -58,7 +58,7 @@ var confo_variables = {
     ConnectCall: function (token) {
         EnxRtc.Logger.setLogLevel(5);
         localStream = EnxRtc.joinRoom(token, {
-            video: this.config.video, audio: this.config.audio, data: this.config.data, videoSize: this.VideoSize[this.video_type],
+            video: this.config.video, audio: this.config.audio, data: this.config.data, videoSize: [],
         }, function (success, error) {
 
             console.log("success---", success, "----error----", error);

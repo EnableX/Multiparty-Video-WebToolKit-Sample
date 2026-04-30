@@ -43,7 +43,7 @@ var confo_variables = {
     ConnectCall: function (token) {
         EnxRtc.Logger.setLogLevel(5);
         localStream = EnxRtc.joinRoom(token, {
-            video: this.config.video, audio: this.config.audio, data: this.config.data, videoSize: this.VideoSize[this.video_type],
+            video: this.config.video, audio: this.config.audio, data: this.config.data, videoSize: [],
         }, function (success, error) {
 
             console.log("success---", success, "----error----", error);
@@ -63,11 +63,29 @@ var confo_variables = {
                 console.log("confo_varibles---" + this.isAudioMute);
                 console.log("confo_varibles---" + confo_variables.isAudioMute);
 
-                document.getElementById(`${localStream.config.video.deviceId}`).checked = true;
-                document.getElementById(`${localStream.config.audio.deviceId}`).checked = true;
-
+                (function syncPrefDeviceRadios() {
+                    function checkIfPresent(deviceId) {
+                        if (!deviceId) return;
+                        var id = String(deviceId);
+                        var el = document.getElementById(id);
+                        if (!el && typeof CSS !== 'undefined' && CSS.escape) {
+                            try {
+                                el = document.querySelector('[id="' + CSS.escape(id) + '"]');
+                            } catch (e) { /* ignore */ }
+                        }
+                        if (el) el.checked = true;
+                    }
+                    var lc = localStream.config || {};
+                    if (lc.video && typeof lc.video === 'object' && lc.video.deviceId) {
+                        checkIfPresent(lc.video.deviceId);
+                    }
+                    if (lc.audio && typeof lc.audio === 'object' && lc.audio.deviceId) {
+                        checkIfPresent(lc.audio.deviceId);
+                    }
+                })();
 
                 room = success.room;
+                window.room = room;
                 confo_variables.updateUsersList();
 
                 var local_name = document.querySelector('.video-caption p');
